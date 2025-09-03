@@ -84,26 +84,38 @@ export default class AlunoController {
 
       if (id && nome && email && idade && turma && turma.id) {
         if (await this.#AlunoRepo.procurarID(id)) {
-            let alunoAtualizado = new AlunoEntity(id, nome, email, idade, new TurmaEntity(turma.id));
+          let alunoAtualizado = new AlunoEntity(
+            id,
+            nome,
+            email,
+            idade,
+            new TurmaEntity(turma.id)
+          );
 
-            if(await this.#AlunoRepo.atualizar(alunoAtualizado)){
-                return res.status(200).json({msg: "Os dados do aluno foram atualizados"})
-            }else{
-                throw new Error("Nao foi possivel alterar os dados do aluno no banco")
-            }
-            
+          if (await this.#AlunoRepo.atualizar(alunoAtualizado)) {
+            return res
+              .status(200)
+              .json({ msg: "Os dados do aluno foram atualizados" });
+          } else {
+            throw new Error(
+              "Nao foi possivel alterar os dados do aluno no banco"
+            );
+          }
         } else {
           return res
             .status(404)
             .json({ msg: "O ID informado nao pertence a nenhum aluno." });
         }
       } else {
-        return res
-          .status(400)
-          .json({
-            msg: "O aluno nao pode conter dados invalidos. Verificar nome, email, idade ou id da turma referente!",
-          });
+        return res.status(400).json({
+          msg: "O aluno nao pode ser atualizado com dados invalidos!.",
+        });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json({ msg: "Nao foi possivel processar a requisicao" });
+    }
   }
 }

@@ -25,9 +25,7 @@ export default class TurmaRepository {
 
     for (let i = 0; i < rows.length; i++) {
       let row = rows[i];
-      turmas.push(
-        new TurmaEntity(row["tur_id"], row["tur_nome"], row["tur_periodo"])
-      );
+      turmas.push(this.toMap(row));
     }
 
     return turmas;
@@ -67,11 +65,7 @@ export default class TurmaRepository {
 
     if (rows.length > 0) {
       const row = rows[0];
-      const turma = new TurmaEntity(
-        row["tur_id"],
-        row["tur_nome"],
-        row["tur_periodo"]
-      );
+      const turma = this.toMap(row);
       return turma;
     }
 
@@ -84,8 +78,18 @@ export default class TurmaRepository {
 
     const values = [id];
 
-    const  rows = await this.#DataBase.ExecutaComando(sql, values);
+    const rows = await this.#DataBase.ExecutaComando(sql, values);
 
     return rows.length > 0;
+  }
+
+  toMap(row) {
+    let turma = new TurmaEntity(
+      row["tur_id"],
+      row["tur_nome"],
+      row["tur_periodo"]
+    );
+
+    return turma;
   }
 }

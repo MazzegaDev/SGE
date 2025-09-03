@@ -15,13 +15,7 @@ export default class AlunoRepository {
 
     if (rows.length > 0) {
       const row = rows[0];
-      const aluno = new AlunoEntity(
-        row["alu_id"],
-        row["alu_nome"],
-        row["alu_email"],
-        row["alu_idade"],
-        new TurmaEntity(row["tur_id"])
-      );
+      const aluno = this.toMap(row);
 
       return aluno;
     }
@@ -32,7 +26,12 @@ export default class AlunoRepository {
   async cadastrar(novoAluno) {
     const sql =
       "insert into TB_Alunos (alu_nome, alu_email, alu_idade, tur_id) values (?, ?, ?, ?)";
-    const values = [novoAluno.nome, novoAluno.email, novoAluno.idade, novoAluno.turma.id];
+    const values = [
+      novoAluno.nome,
+      novoAluno.email,
+      novoAluno.idade,
+      novoAluno.turma.id,
+    ];
     const result = await this.#DataBase.ExecutaComandoNonQuery(sql, values);
 
     return result;
@@ -46,35 +45,49 @@ export default class AlunoRepository {
     for (let i = 0; i < rows.length; i++) {
       let row = rows[i];
 
-      alunos.push(
-        new AlunoEntity(
-          row["alu_id"],
-          row["alu_nome"],
-          row["alu_email"],
-          row["alu_idade"],
-          new TurmaEntity(row["tur_id"])
-        )
-      );
+      alunos.push(this.toMap(row));
     }
 
     return alunos;
   }
 
-  async atualizar(alunoAtualizado){
-    const sql = "update TB_Alunos set alu_nome = ?, alu_email = ?, alu_idade = ?, tur_id = ? where alu_id = ?";
-    const values = [alunoAtualizado.nome, alunoAtualizado.email, alunoAtualizado.idade, alunoAtualizado.turma.id, alunoAtualizado.id];
+  async atualizar(alunoAtualizado) {
+    const sql =
+      "update TB_Alunos set alu_nome = ?, alu_email = ?, alu_idade = ?, tur_id = ? where alu_id = ?";
+    const values = [
+      alunoAtualizado.nome,
+      alunoAtualizado.email,
+      alunoAtualizado.idade,
+      alunoAtualizado.turma.id,
+      alunoAtualizado.id,
+    ];
 
     const result = await this.#DataBase.ExecutaComandoNonQuery(sql, values);
 
     return result;
   }
 
-  async deletar(id){
+  async deletar(id) {
     const sql = "delete from TB_Alunos where alu_id = ?";
     const values = [id];
 
     const result = await this.#DataBase.ExecutaComandoNonQuery(sql, values);
 
     return result;
+  }
+
+  toMap(row) {
+    let aluno = new AlunoEntity(
+      row["alu_id"],
+      row["alu_nome"],
+      row["alu_email"],
+      row["alu_idade"],
+      new TurmaEntity(row["tur_id"])
+    );
+    if (row["tur_nome"]) {
+      aluno.turma.nome = row["tur_nome"];
+    }
+
+    return aluno;
   }
 }
