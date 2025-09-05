@@ -7,9 +7,9 @@ export default class TurmaRepository {
   }
 
   async cadastrar(novaTurma) {
-    const sql = "insert into TB_Turmas (tur_nome, tur_periodo) values (?, ?)";
+    const sql = "insert into TB_Turmas (tur_nome, tur_periodo, pro_id) values (?, ?, ?)";
 
-    const values = [novaTurma.nome, novaTurma.periodo];
+    const values = [novaTurma.nome, novaTurma.periodo, novaTurma.professor.id];
 
     const result = await this.#DataBase.ExecutaComandoNonQuery(sql, values);
 
@@ -33,11 +33,12 @@ export default class TurmaRepository {
 
   async atualizar(turmaAtualizada) {
     const sql =
-      "update TB_Turmas set tur_nome = ?, tur_periodo = ? where tur_id = ?";
+      "update TB_Turmas set tur_nome = ?, tur_periodo = ?, pro_id = ? where tur_id = ?";
 
     const values = [
       turmaAtualizada.nome,
       turmaAtualizada.periodo,
+      turmaAtualizada.professor.id,
       turmaAtualizada.id,
     ];
 
@@ -89,6 +90,9 @@ export default class TurmaRepository {
       row["tur_nome"],
       row["tur_periodo"]
     );
+    if(row["pro_id"]){
+      turma.professor.id = row["pro_id"]
+    }
 
     return turma;
   }

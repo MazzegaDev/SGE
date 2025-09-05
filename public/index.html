@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="grid-container">
+      <div class="main">
+        <h1>Teste api</h1>
+        <ul id="lista"></ul>
+
+      
+      </div>
+    </div>
+
+    <script>
+      const url = "http://localhost:3000/aluno";
+      
+
+      async function carregarDados() {
+        try {
+          //Faz a requisicao da nossa api
+          const res = await fetch(url);
+
+          // transforma os dados da resposta em JSON
+          const data = await res.json();
+
+          const lista = document.getElementById("lista");
+
+          data.forEach((x) => {
+            if (x.turma.id === null) {
+              x.turma.id = "sem turma definida";
+            }
+
+            let li = document.createElement("li");
+
+            let dados = document.createTextNode(
+              `Nome: ${x.nome} - Email: ${x.email} - Idade: ${x.idade} - ID turma: ${x.turma.id}`
+            );
+
+            li.appendChild(dados);
+            lista.appendChild(li);
+          });
+        } catch (error) {
+          console.log("erro ao buscar dados", error);
+        }
+      }
+
+     
+      carregarDados();
+    </script>
+  </body>
+</html>

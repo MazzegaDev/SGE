@@ -1,7 +1,10 @@
-export default class TurmaEntity {
+import Base from "./base.js";
+
+export default class TurmaEntity extends Base{
   #id;
   #nome;
   #periodo;
+  #professor;
 
   get id() {
     return this.#id;
@@ -27,17 +30,21 @@ export default class TurmaEntity {
     this.#periodo = periodo;
   }
 
-  constructor(id, nome, periodo) {
+  get professor(){
+    return this.#professor;
+  }
+
+  set professor(professor){
+    this.#professor = professor;
+  }
+
+  constructor(id, nome, periodo, professor) {
+    super();
     this.#id = id;
     this.#nome = nome;
     this.#periodo = periodo;
+    this.#professor = professor
   }
 
-  toJSON() {
-    return {
-      id: this.#id,
-      nome: this.#nome,
-      periodo: this.#periodo,
-    };
-  }
+
 }

@@ -35,11 +35,20 @@ export default class AlunoController {
           idade,
           new TurmaEntity(turma.id)
         );
-        let inseriu = await this.#AlunoRepo.cadastrar(novoAluno);
-        if (inseriu == true) {
-          return res.status(200).json({ msg: "Novo aluno inserido!" });
+
+        if (await this.#AlunoRepo.verificaTurma(turma.id)) {
+          let inseriu = await this.#AlunoRepo.cadastrar(novoAluno);
+          if (inseriu == true) {
+            return res.status(200).json({ msg: "Novo aluno inserido!" });
+          } else {
+            throw new Error("Nao foi possivel persistir os dados no banco.");
+          }
         } else {
-          throw new Error("Nao foi possivel persistir os dados no banco.");
+          return res
+            .status(400)
+            .json({
+              msg: "O id de turma informado nao e valido pois nao pertence a nenhuma turma.",
+            });
         }
       } else {
         return res.status(400).json({

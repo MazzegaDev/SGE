@@ -13,14 +13,7 @@ export default class AlunoRepository {
     const values = [id];
     const rows = await this.#DataBase.ExecutaComando(sql, values);
 
-    if (rows.length > 0) {
-      const row = rows[0];
-      const aluno = this.toMap(row);
-
-      return aluno;
-    }
-
-    return null;
+    return rows.length > 0;
   }
 
   async cadastrar(novoAluno) {
@@ -76,6 +69,15 @@ export default class AlunoRepository {
     return result;
   }
 
+  async verificaTurma(turId){
+    const sql = "select * from tb_turmas where tur_id = ?";
+    const values = [turId];
+
+    const rows = await this.#DataBase.ExecutaComando(sql, values);
+
+    return rows.length > 0;
+  }
+
   toMap(row) {
     let aluno = new AlunoEntity(
       row["alu_id"],
@@ -91,3 +93,6 @@ export default class AlunoRepository {
     return aluno;
   }
 }
+
+
+

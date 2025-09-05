@@ -1,4 +1,5 @@
 import TurmaRepository from "../repositories/turmaRepository.js";
+import ProfessorEntity from "../entities/professorEntity.js";
 import TurmaEntity from "../entities/turmaEntity.js";
 
 export default class TurmaController {
@@ -9,9 +10,9 @@ export default class TurmaController {
 
   async cadastrar(req, res) {
     try {
-      let { nome, periodo } = req.body;
-      if (nome && periodo) {
-        let novaTurma = new TurmaEntity(0, nome, periodo);
+      let { nome, periodo, professor } = req.body;
+      if (nome && periodo && professor && professor.id) {
+        let novaTurma = new TurmaEntity(0, nome, periodo, new ProfessorEntity(professor.id));
         let inseriu = await this.#TurmaRepo.cadastrar(novaTurma);
         if (inseriu == true) {
           return res.status(200).json({ msg: "Nova turma criada." });
@@ -53,10 +54,10 @@ export default class TurmaController {
 
   async atualizar(req, res) {
     try {
-      let { id, nome, periodo } = req.body;
-      if (id && nome && periodo) {
+      let { id, nome, periodo, professor } = req.body;
+      if (id && nome && periodo && professor && professor.id) {
         if (await this.#TurmaRepo.procurarID(id)) {
-          let turmaAtualizada = new TurmaEntity(id, nome, periodo);
+          let turmaAtualizada = new TurmaEntity(id, nome, periodo, new ProfessorEntity(professor.id));
           if (await this.#TurmaRepo.atualizar(turmaAtualizada)) {
             return res
               .status(200)

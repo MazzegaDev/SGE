@@ -1,11 +1,10 @@
 import Base from "./base.js";
 
-export default class AlunoEntity extends Base {
+export default class ProfessorEntity extends Base{
   #id;
   #nome;
   #email;
-  #idade;
-  #turma; //Chave estrangeira
+  #materia;
 
   get id() {
     return this.#id;
@@ -31,28 +30,19 @@ export default class AlunoEntity extends Base {
     this.#email = email;
   }
 
-  get idade() {
-    return this.#idade;
+  get materia() {
+    return this.#materia;
   }
 
-  set idade(idade) {
-    this.#idade = idade;
+  set materia(materia) {
+    this.#materia = materia;
   }
 
-  get turma() {
-    return this.#turma;
-  }
-
-  set turma(turma) {
-    this.#turma = turma;
-  }
-
-  constructor(id, nome, email, idade, turma) {
+  constructor(id, nome, email, materia) {
     super();
     this.#id = id;
     this.#nome = nome;
     this.email = email;
-    this.#idade = idade;
-    this.#turma = turma;
+    this.#materia = materia;
   }
 }
