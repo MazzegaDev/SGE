@@ -8,7 +8,8 @@ export default class Base{
         for (const prop of props) {
             json[prop] = this[prop];
 
-            return json;
+            
         }
+        return json;
     }
 }

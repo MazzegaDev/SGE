@@ -1,27 +1,76 @@
 import AlunoController from "../controllers/alunoController.js";
 import express from "express";
+import AuthMiddleware from "../middleware/authMiddleware.js";
 
+const Auth = new AuthMiddleware();
 const AlunoRoute = express.Router();
 const CTRL = new AlunoController();
 
-AlunoRoute.get("/", (req, res) => {
+AlunoRoute.post("/", Auth.autenticarToken, (req, res) => {
+  // #swagger.tags = ['aluno']
+  // #swagger.summary = 'Cadastra um aluno'
 
-    CTRL.listar(req,res);
-})
+  /*
+        #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: { $ref: '#/components/schemas/aluno' }
+                } 
+            }
+        }
+  */
 
-AlunoRoute.post("/", (req, res) => {
+  /*
+    #swagger.security = [{
+      "bearerAuth": []
+    }]
+  */
 
-    CTRL.cadastrar(req,res);
-})
+  CTRL.cadastrar(req, res);
+});
 
-AlunoRoute.delete("/:id", (req, res) => {
+AlunoRoute.get("/", Auth.autenticarToken, (req, res) => {
+  // #swagger.tags = ['aluno']
+  // #swagger.summary = 'Lista todos os alunos'
 
-    CTRL.deletar(req, res);
-})
+  /*
+        #swagger.responses[404] = {
+            description: "Nenhum usuario encontrado",
+            schema: { $ref: '#/components/schemas/erro' }
+        }
+  */
 
-AlunoRoute.put("/", (req, res) => {
+  /*
+    #swagger.security = [{
+      "bearerAuth": []
+    }]
+  */
+  CTRL.listar(req, res);
+});
 
-    CTRL.atualizar(req,res);
-})
+AlunoRoute.put("/", Auth.autenticarToken, (req, res) => {
+  // #swagger.tags = ['aluno']
+  // #swagger.summary = 'Atualiza um aluno'
+
+  /*
+    #swagger.security = [{
+      "bearerAuth": []
+    }]
+  */
+  CTRL.atualizar(req, res);
+});
+
+AlunoRoute.delete("/:id", Auth.autenticarToken, (req, res) => {
+  // #swagger.tags = ['aluno']
+  // #swagger.summary = 'Deleta um aluno'
+
+  /*
+    #swagger.security = [{
+      "bearerAuth": []
+    }]
+  */
+  CTRL.deletar(req, res);
+});
 
 export default AlunoRoute;

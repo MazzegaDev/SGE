@@ -1,27 +1,57 @@
 import express from "express";
 import MateriaController from "../controllers/materiaController.js";
+import AuthMiddleware from "../middleware/authMiddleware.js";
 
+const Auth = new AuthMiddleware();
 const MatRouter = express.Router();
 const CTRL = new MateriaController();
 
-router.get("/", (req, res) =>{
+MatRouter.post("/", Auth.autenticarToken, (req, res) => {
+  // #swagger.tags = ['Materia']
+  // #swagger.summary = 'Cadastra uma materia'
 
-    CTRL.listar(req, res);
+  /*
+    #swagger.security = [{
+      "bearerAuth": []
+    }]
+  */
+  CTRL.cadastrar(req, res);
 });
 
-router.post("/", (req, res) => {
+MatRouter.get("/", Auth.autenticarToken, (req, res) => {
+  // #swagger.tags = ['Materia']
+  // #swagger.summary = 'Lista todas as materias'
 
-    CTRL.cadastrar(req, res);
+  /*
+    #swagger.security = [{
+      "bearerAuth": []
+    }]
+  */
+  CTRL.listar(req, res);
 });
 
-router.put("/", (req, res) => {
+MatRouter.put("/", Auth.autenticarToken, (req, res) => {
+  // #swagger.tags = ['Materia']
+  // #swagger.summary = 'Atualiza uma materia'
 
-    CTRL.alterar(req, res);
+  /*
+    #swagger.security = [{
+      "bearerAuth": []
+    }]
+  */
+  CTRL.alterar(req, res);
 });
 
-router.delete("/:id", (req, res) => {
+MatRouter.delete("/:id", Auth.autenticarToken, (req, res) => {
+  // #swagger.tags = ['Materia']
+  // #swagger.summary = 'Deleta uma materia'
 
-    CTRL.deletar(req, res);
+  /*
+    #swagger.security = [{
+      "bearerAuth": []
+    }]
+  */
+  CTRL.deletar(req, res);
 });
 
 export default MatRouter;

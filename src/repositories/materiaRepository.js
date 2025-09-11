@@ -9,12 +9,12 @@ export default class MateriaRepository {
 
   async listar() {
     const sql = "select * from tb_materias";
-    const rows = this.#Database.ExecutaComando(sql);
+    const rows = await this.#Database.ExecutaComando(sql);
 
     let materias = [];
 
     for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
+      let row = rows[i];
       materias.push(this.toMap(row));
     }
 
@@ -56,6 +56,8 @@ export default class MateriaRepository {
     
     return rows.length > 0; 
   }
+
+
 
   toMap(row) {
     let materia = new MateriaEntity(row["mat_id"], row["mat_nome"]);

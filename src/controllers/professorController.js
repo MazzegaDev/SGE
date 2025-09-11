@@ -34,7 +34,7 @@ export default class ProfessorController {
           email,
           new MateriaEntity(materia.id)
         );
-        if (await this.#ProRepo.procurarIdMateria(id)) {
+        if (await this.#ProRepo.procurarIdMateria(materia.id)) {
           if (await this.#ProRepo.cadastrar(novoProf)) {
             return res.status(200).json({ msg: "O professor foi cadastrado." });
           } else {
@@ -43,7 +43,7 @@ export default class ProfessorController {
             );
           }
         } else {
-          return res.status(404).json({
+          return res.status(400).json({
             msg: "O ID da materia informado nao pertence a nenhuma materia",
           });
         }
@@ -71,11 +71,17 @@ export default class ProfessorController {
           new MateriaEntity(materia.id)
         );
         if (await this.#ProRepo.procurarID(id)) {
-          if (await this.#ProRepo.alterar(profAtualizado)) {
+          if (await this.#ProRepo.procurarIdMateria(materia.id)) {
+            if (await this.#ProRepo.alterar(profAtualizado)) {
+            } else {
+              throw new Error(
+                "Nao foi possivel alterar os dados do professor no banco"
+              );
+            }
           } else {
-            throw new Error(
-              "Nao foi possivel alterar os dados do professor no banco"
-            );
+            return res.status(400).json({
+              msg: "O id da materia do professor nao pode ser atualizado com um id que nao referencie uma materia existente",
+            });
           }
         } else {
           return res
@@ -113,6 +119,4 @@ export default class ProfessorController {
       }
     } catch (error) {}
   }
-
-  
 }
