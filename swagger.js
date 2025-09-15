@@ -33,6 +33,18 @@ const docs = {
         nome: "1-Ano",
         periodo: "periodo de aula da turma",
       },
+      usuario: {
+        nome: "nome do usuario",
+        email: "email do usuario",
+        senha: "senha do usuario",
+        ativo: false,
+        perfil: {
+          id: 3,
+        },
+      },
+      perfil: {
+        desc: "ADM/USER/VISITANTE"
+      }
     },
     securitySchemes: {
       bearerAuth: {

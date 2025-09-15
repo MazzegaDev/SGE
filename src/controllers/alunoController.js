@@ -44,11 +44,9 @@ export default class AlunoController {
             throw new Error("Nao foi possivel persistir os dados no banco.");
           }
         } else {
-          return res
-            .status(400)
-            .json({
-              msg: "O id de turma informado nao e valido pois nao pertence a nenhuma turma.",
-            });
+          return res.status(400).json({
+            msg: "O id de turma informado nao e valido pois nao pertence a nenhuma turma.",
+          });
         }
       } else {
         return res.status(400).json({
@@ -119,6 +117,35 @@ export default class AlunoController {
         return res.status(400).json({
           msg: "O aluno nao pode ser atualizado com dados invalidos!.",
         });
+      }
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json({ msg: "Nao foi possivel processar a requisicao" });
+    }
+  }
+
+  async contarPorTurma(req, res) {
+    try {
+      let { id } = req.params;
+      if (await this.#AlunoRepo.verificaTurma(id)) {
+        let quantidade = await this.#AlunoRepo.contarPorTurma(id);
+        if (quantidade > 0) {
+          return res.status(200).json({
+            msg: `A turma com o id ${id} possui ${quantidade} alunos`,
+          });
+        } else {
+          return res
+            .status(404)
+            .json({ msg: "Essa turma nao possui alunos para contar" });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({
+            msg: "O id de turma informado nao e valido pois nao pertence a nenhuma turma.",
+          });
       }
     } catch (error) {
       console.log(error);

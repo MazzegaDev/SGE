@@ -14,7 +14,7 @@ export default class AuthController {
         let usuario = await this.#usuRepo.validarAcesso(email, senha);
         if (usuario) {
             let auth = new AuthMiddleware();
-            let token = auth.gerarToken(usuario.usu_id, usuario.usu_nome, usuario.usu_email);
+            let token = auth.gerarToken(usuario.id, usuario.nome, usuario.email, usuario.perfil.id);
             return res.status(200).json({token: token});
         } else {
           return res.status(404).json({ msg: "Nenhum usuario encontrado" });

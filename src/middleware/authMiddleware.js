@@ -3,13 +3,14 @@ const secret = "m5a5z4g3wppr";
 import usuarioRepository from "../repositories/usuarioRepository.js";
 
 export default class AuthMiddleware {
-  gerarToken(usu_id, usu_nome, usu_email) {
+  gerarToken(id, nome, email, perfil) {
     let jwtObj = jwt.sign(
       {
         //Payload = Dados do usuario
-        id: usu_id,
-        nome: usu_nome,
-        email: usu_email,
+        id: id,
+        nome: nome,
+        email: email,
+        perfil: perfil,
       },
       //secret key
       secret,
@@ -25,16 +26,20 @@ export default class AuthMiddleware {
   async autenticarToken(req, res, next) {
     if (req.headers.authorization) {
       let token = req.headers.authorization.split(" ")[1];
-      console.log(token);
+      // console.log(token);
       try {
         let payload = jwt.verify(token, secret); // <- se nosso token for valido, o jwt.verify vai decodificar o corpo e rotornar as infos do usuarios (payload)
         let usuarioRepo = new usuarioRepository();
 
-        console.log(payload);
+        // console.log(payload);
 
-        let usuario = await usuarioRepo.buscarId(payload.id);
+        let usuario = await usuarioRepo.validarUser(payload.id);
         if (usuario) {
-          next();
+          if (usuario.ativo) {
+            next();
+          } else {
+            return res.status(401).json({ msg: "Usuario inativo" });
+          }
         } else {
           return res.status(404).json({ msg: "Esse usuario nao existe." });
         }

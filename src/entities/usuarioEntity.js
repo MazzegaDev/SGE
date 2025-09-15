@@ -1,45 +1,66 @@
 import base from "./base.js"
 
 export default class UsuarioEntity extends base{
-    #usu_id;
-    #usu_nome;
-    #usu_senha;
-    #usu_email;
+    #id;
+    #nome;
+    #senha;
+    #email;
+    #ativo;
+    #perfil;
 
-    get usu_id(){
-        return this.#usu_id;
+    get id(){
+        return this.#id;
     }
-    set usu_id(id){
-        this.#usu_id = id;
-    }
-
-    get usu_nome(){
-        return this.#usu_nome;
-    }
-    set usu_nome(nome){
-        this.#usu_nome = nome;
+    set id(id){
+        this.#id = id;
     }
 
-    get usu_senha(){
-        return this.#usu_senha; 
+    get nome(){
+        return this.#nome;
     }
-    set usu_senha(senha){
-        this.#usu_senha = senha;
-    }
-
-    get usu_email(){
-        return this.#usu_email;
-    }
-    set usu_email(email){
-        this.#usu_email = email
+    set nome(nome){
+        this.#nome = nome;
     }
 
-    constructor(id, nome, senha, email){
+    get senha(){
+        return this.#senha; 
+    }
+    set senha(senha){
+        this.#senha = senha;
+    }
+
+    get email(){
+        return this.#email;
+    }
+    set email(email){
+        this.#email = email
+    }
+
+    get perfil(){
+        return this.#perfil;
+    }
+
+    set perfil(perfil){
+        this.#perfil = perfil;
+    }
+
+    get ativo(){
+        return this.#ativo; 
+    }
+
+    set ativo(ativo){
+        this.#ativo = ativo;
+    }
+
+
+    constructor(id, nome, senha, email, perfil, ativo){
         super();
-        this.#usu_id = id;
-        this.#usu_nome = nome;
-        this.#usu_senha = senha;
-        this.#usu_email = email;
+        this.#id = id;
+        this.#nome = nome;
+        this.#senha = senha;
+        this.#email = email;
+        this.#perfil = perfil;
+        this.#ativo = ativo;
     }
 
 }

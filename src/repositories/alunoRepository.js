@@ -78,6 +78,14 @@ export default class AlunoRepository {
     return rows.length > 0;
   }
 
+  async contarPorTurma(id){
+    const sql = "select count(*) as total_alunos from TB_Alunos where tur_id = ?";
+    const values = [id];
+    const rows = await this.#DataBase.ExecutaComando(sql,values);
+
+    return rows[0]?.total_alunos ?? 0;
+  }
+
   toMap(row) {
     let aluno = new AlunoEntity(
       row["alu_id"],

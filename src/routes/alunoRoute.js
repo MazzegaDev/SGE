@@ -36,7 +36,7 @@ AlunoRoute.get("/", Auth.autenticarToken, (req, res) => {
 
   /*
         #swagger.responses[404] = {
-            description: "Nenhum usuario encontrado",
+            description: "Nenhum aluno encontrado",
             schema: { $ref: '#/components/schemas/erro' }
         }
   */
@@ -47,6 +47,18 @@ AlunoRoute.get("/", Auth.autenticarToken, (req, res) => {
     }]
   */
   CTRL.listar(req, res);
+});
+
+AlunoRoute.get("/:id", Auth.autenticarToken, (req, res) => {
+  // #swagger.tags = ['aluno']
+  // #swagger.summary = 'lista quantos alunos tem em uma turma'
+
+  /*
+    #swagger.security = [{
+      "bearerAuth": []
+    }]
+  */
+  CTRL.contarPorTurma(req, res);
 });
 
 AlunoRoute.put("/", Auth.autenticarToken, (req, res) => {
